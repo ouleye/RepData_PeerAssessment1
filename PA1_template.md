@@ -1,30 +1,30 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document : 
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ### Loading and preprocessing the data
 *To perform this code the working Directory should be the forked and cloned repository __"RepData_PeerAssessment1"__.*
 
 >Load the data (i.e. read.csv())
-```{r global_options,warning=FALSE, message=FALSE }
 
+```r
 if(!file.exists("./activity.csv")) {unzip ("./activity.zip") }
 PA1 <- read.csv("./activity.csv")
-
 ```
 
 
 >Process/transform the data (if necessary) into a format suitable for your analysis
-```{r}
 
+```r
 PA1$date<-as.Date(PA1$date,"%Y-%m-%d")
 PA1$interval<-as.factor(PA1$interval)
 str (PA1)
+```
 
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : Date, format: "2012-10-01" "2012-10-01" ...
+##  $ interval: Factor w/ 288 levels "0","5","10","15",..: 1 2 3 4 5 6 7 8 9 10 ...
 ```
 
     
@@ -32,17 +32,50 @@ str (PA1)
 
 > Load of all the required packages
 
-```{r results='hide'}
+
+```r
 require('dplyr')
+```
+
+```
+## Loading required package: dplyr
+## 
+## Attaching package: 'dplyr'
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 require('ggplot2')
+```
+
+```
+## Loading required package: ggplot2
 ```
 
 
 > Calculate the total number of steps taken per day
 
-```{r}
+
+```r
 sumPerDay <- aggregate(steps ~ date, data = PA1, FUN = sum)
 head(sumPerDay)
+```
+
+```
+##         date steps
+## 1 2012-10-02   126
+## 2 2012-10-03 11352
+## 3 2012-10-04 12116
+## 4 2012-10-05 13294
+## 5 2012-10-06 15420
+## 6 2012-10-07 11015
 ```
 
 
@@ -51,36 +84,41 @@ head(sumPerDay)
 I will make here a histogram (NOT A BARPLOT as this is what has been required in the assignment) of the total number of steps taken each day  
 
 *for a better reading of the histogram, I set the binwidth to 1000*
-```{r results='asis'}
+
+```r
 ggplot(sumPerDay,aes(steps)) + 
         #define that it will be a histogram
          geom_histogram(fill="#0072B2", colour="black",binwidth=1000) +
         labs(x="Number of steps taken each day ",y= "Frequency")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
 
 
 **Just for info**, here is the corresponding barplot
-```{r results='asis'}
+
+```r
 par(mar=c(5,10,1,1),las = 1)
 ggplot(sumPerDay,aes(x=date, y=steps)) + 
         #define that it will be a barplot
          geom_bar(stat = "identity",fill="#0072B2", colour="black") +
         labs(x="Date",y= "Number of Steps per day") +
         theme(axis.text.x=element_blank())
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
 
 >Calculate and report the mean and median of the total number of steps taken per day
 
-```{r}
+
+```r
 MeanPerDay <- mean(sumPerDay$steps,na.rm=TRUE)
 MedianPerDay <- median(sumPerDay$steps,na.rm=TRUE)
 ```
  
-<span style="color:blue">**The mean total number of steps taken per day is _`r ceiling(MeanPerDay)`_ steps and the median is _`r MedianPerDay`_ steps.**</span>  
+<span style="color:blue">**The mean total number of steps taken per day is _1.0767\times 10^{4}_ steps and the median is _10765_ steps.**</span>  
 
 
                |                 
@@ -89,7 +127,8 @@ MedianPerDay <- median(sumPerDay$steps,na.rm=TRUE)
 ### What is the average daily activity pattern?
 > Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r}
+
+```r
 #Summarize the activity per interval
 MeanPerInterval<- PA1 %>% 
         group_by(interval) %>%
@@ -102,16 +141,17 @@ ggplot(MeanPerInterval,aes(x=interval, y=IntervalMean)) +
          geom_line(aes(group =1),colour="#0072B2") +
         labs(x="interval",y= "Average Steps per interval") +
         theme(axis.text.x=element_blank())
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
 
 >Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r}
-Max <- MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
 
+```r
+Max <- MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
 ```
 
-<span style="color:blue">**The  5-minute interval, on average across all the days in the dataset, contains the maximum number of steps is the _`r Max`_.**</span>    
+<span style="color:blue">**The  5-minute interval, on average across all the days in the dataset, contains the maximum number of steps is the _835_.**</span>    
 
 
   
@@ -120,11 +160,11 @@ Max <- MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
 ### Imputing missing values
 
 > Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-```{r}
-Number_of_missing_values <- sum(is.na(PA1$steps))
 
+```r
+Number_of_missing_values <- sum(is.na(PA1$steps))
 ```
-<span style="color:blue">**There are  _`r Number_of_missing_values`_ missing values in the Activity Dataset.**</span> 
+<span style="color:blue">**There are  _2304_ missing values in the Activity Dataset.**</span> 
 
 >Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
