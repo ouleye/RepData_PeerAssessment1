@@ -6,6 +6,7 @@
 
 >Load the data (i.e. read.csv())
 
+
 ```r
 if(!file.exists("./activity.csv")) {unzip ("./activity.zip") }
 PA1 <- read.csv("./activity.csv")
@@ -121,9 +122,6 @@ MedianPerDay <- median(sumPerDay$steps,na.rm=TRUE)
 <span style="color:blue">**The mean total number of steps taken per day is _1.0767\times 10^{4}_ steps and the median is _10765_ steps.**</span>  
 
 
-               |                 
-
-
 ### What is the average daily activity pattern?
 > Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
@@ -151,19 +149,18 @@ ggplot(MeanPerInterval,aes(x=interval, y=IntervalMean)) +
 Max <- MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
 ```
 
-<span style="color:blue">**The  5-minute interval, on average across all the days in the dataset, contains the maximum number of steps is the _835_.**</span>    
 
-
-  
-            
+<span style="color:blue">**The  5-minute interval, on average across all the days in the dataset, contains the maximum number of steps is the _835_.**</span>            
     
 ### Imputing missing values
 
 > Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
+
 ```r
 Number_of_missing_values <- sum(is.na(PA1$steps))
 ```
+
 <span style="color:blue">**There are  _2304_ missing values in the Activity Dataset.**</span> 
 
 >Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.

@@ -10,21 +10,18 @@ output:
 *To perform this code the working Directory should be the forked and cloned repository __"RepData_PeerAssessment1"__.*
 
 >Load the data (i.e. read.csv())
-```{r global_options,warning=FALSE, message=FALSE }
 
+```{r global_options,warning=FALSE, message=FALSE }
 if(!file.exists("./activity.csv")) {unzip ("./activity.zip") }
 PA1 <- read.csv("./activity.csv")
-
 ```
 
 
 >Process/transform the data (if necessary) into a format suitable for your analysis
 ```{r}
-
 PA1$date<-as.Date(PA1$date,"%Y-%m-%d")
 PA1$interval<-as.factor(PA1$interval)
 str (PA1)
-
 ```
 
     
@@ -83,9 +80,6 @@ MedianPerDay <- median(sumPerDay$steps,na.rm=TRUE)
 <span style="color:blue">**The mean total number of steps taken per day is _`r ceiling(MeanPerDay)`_ steps and the median is _`r MedianPerDay`_ steps.**</span>  
 
 
-               |                 
-
-
 ### What is the average daily activity pattern?
 > Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
@@ -108,22 +102,19 @@ ggplot(MeanPerInterval,aes(x=interval, y=IntervalMean)) +
 >Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 ```{r}
 Max <- MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
-
 ```
 
-<span style="color:blue">**The  5-minute interval, on average across all the days in the dataset, contains the maximum number of steps is the _`r Max`_.**</span>    
 
-
-  
-            
+<span style="color:blue">**The  5-minute interval, on average across all the days in the dataset, contains the maximum number of steps is the _`r Max`_.**</span>            
     
 ### Imputing missing values
 
 > Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+
 ```{r}
 Number_of_missing_values <- sum(is.na(PA1$steps))
-
 ```
+
 <span style="color:blue">**There are  _`r Number_of_missing_values`_ missing values in the Activity Dataset.**</span> 
 
 >Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
