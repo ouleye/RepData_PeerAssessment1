@@ -74,8 +74,8 @@ ggplot(sumPerDay,aes(x=date, y=steps)) +
 MeanPerDay <- mean(sumPerDay$steps,na.rm=TRUE)
 MedianPerDay <- median(sumPerDay$steps,na.rm=TRUE)
 ```
-<span style="color:blue">**Mean =`r MeanPerDay`**</span>   
-<span style="color:blue">**Median = `r MedianPerDay`**</span>   
+>**Mean =`r MeanPerDay`**  
+>**Median = `r MedianPerDay`**
 
 
 ### What is the average daily activity pattern?
@@ -101,7 +101,7 @@ ggplot(MeanPerInterval,aes(x=interval, y=IntervalMean)) +
 ```{r}
 Max <- MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
 ```
-<span style="color:blue">**`r Max`**</span>        
+>**`r Max`**        
     
 ### Imputing missing values
 
@@ -110,11 +110,11 @@ Max <- MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
 ```{r}
 missing_values <- sum(is.na(PA1$steps))
 ```
-<span style="color:blue">**`r missing_values`**</span>   
+>**`r missing_values`**
 
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
-<span style="color:blue"> My strategy is to replace the NA values in the steps variable by the mean calculated above for the same 5-minute  interval and round it to the ceiling value</span> 
+> My strategy is to replace the NA values in the steps variable by the mean calculated above for the same 5-minute  interval and round it to the ceiling value
 
 
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
@@ -143,19 +143,18 @@ NewMeanPerDay <- mean(NewsumPerDay$steps)
 NewMedianPerDay<- median(NewsumPerDay$steps)
 ```
 
-<span style="color:blue">The new mean is **`r  NewMeanPerDay`** while the mean with NA values was **`r MeanPerDay` **</span>   
-<span style="color:blue">The new median is **`r NewMedianPerDay`** while the median  with NA values was **`r MedianPerDay` **</span>  
+>The new mean is **`r  NewMeanPerDay`** while the mean with NA values was **`r MeanPerDay`**
+>The new median is **`r NewMedianPerDay`** while the median  with NA values was **`r MedianPerDay`**
 
 ```{r fig.width = 9, fig.height = 5, dpi = 144}
 mean_change_percentage <- round((NewMeanPerDay-MeanPerDay)*100/MeanPerDay,2)
-mean_change_percentage <- round((NewMedianPerDay-MedianPerDay)*100/MedianPerDay,2)
+median_change_percentage <- round((NewMedianPerDay-MedianPerDay)*100/MedianPerDay,2)
 ```
 
 
-<span style="color:blue">We can observe a **slight increase**  (**`r mean_change_percentage`%** for the mean  and **`r mean_change_percentage`%** for the median) . That is explained by the strategy choosen which consisted in adding the average value for the same interval. Hence,no impact can be considered regarding the mean of median value.</span>  
+>by calculating the ration between old and new values for the mean and median, we can observe a  ** very slight increase**  (**`r mean_change_percentage`%** for the mean  and **`r median_change_percentage`%** for the median) . That is explained by the strategy choosen which consisted in adding the average value for the same interval. Hence, no real impact can be considered. 
 
-
-<span style="color:blue">However,by comparing the histograms, it appears that the frenquency for the 10000 to 11000 steps per day has increase by more than five numbers of days. </span>  
+>However,by comparing the histograms, it appears that the frenquency for the 10000 to 11000 steps per day has increase by more than five numbers of days. 
 
  
 ### Are there differences in activity patterns between weekdays and weekends?
@@ -190,7 +189,7 @@ ggplot(MeanPerdaytype,aes(x=interval, y=Mean, group=day_type)) +
         geom_line(stat = "hline", yintercept = "mean", aes(colour = day_type))
 ```
 
-<span style="color:blue">Instead of separating the data into two panels, I decided to display them together to be able to analyse more clearly their differences.  
+>Instead of separating the data into two panels, I decided to display them together to be able to analyse more clearly their differences.  
 I also added horizontale lines that represent the average number of stpes taken during a 5 minutes interval.  
 The conclusion that can be made is that while the activity is clearly higher during the morning  and evening during the weekdays, it is more spread along the day in the weekends.  
-Hence , the average activity is higher on the weekends as shown by the mean lines.</span>
+Hence , the average activity is higher on the weekends as shown by the mean lines.
