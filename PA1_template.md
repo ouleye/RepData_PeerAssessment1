@@ -11,8 +11,6 @@ By O. GUEYE
 if(!file.exists("./activity.csv")) {unzip ("./activity.zip") }
 PA1 <- read.csv("./activity.csv")
 ```
-  
-  
 
 2. Process/transform the data (if necessary) into a format suitable for your analysis
 
@@ -59,7 +57,6 @@ head(sumPerDay)
 ## 6 2012-10-07 11015
 ```
 
-
 2. Make a **histogram** of the total number of steps taken each day  
 
 <span style="color:blue">For a better reading of the histogram, I set the binwidth to 1000</span>
@@ -88,15 +85,26 @@ ggplot(sumPerDay,aes(x=date, y=steps)) +
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
-
 3. Calculate and report the mean and median of the total number of steps taken per day
 
 ```r
 MeanPerDay <- mean(sumPerDay$steps,na.rm=TRUE)
 MedianPerDay <- median(sumPerDay$steps,na.rm=TRUE)
+print(MeanPerDay)
 ```
->**Mean =10766.1886792**  
->**Median = 10765**
+
+```
+## [1] 10766.19
+```
+
+```r
+print(MedianPerDay)
+```
+
+```
+## [1] 10765
+```
+
 
 
 ### What is the average daily activity pattern?
@@ -114,7 +122,7 @@ par(mfrow = c(1, 1), mar = c(3, 2, 2, 2))
 ggplot(MeanPerInterval,aes(x=interval, y=IntervalMean)) + 
         #define that it will be a line
          geom_line(aes(group =1),colour="#0072B2") +
-        labs(x="interval",y= "Average Steps per interval", main= 'average number of steps taken across all day') +
+        labs(x="<--- morning           ---     interval     ---            Evening --->",y= "Average Steps per interval", main= 'average number of steps taken across all day') +
         scale_x_discrete(breaks=NULL)
 ```
 
@@ -123,9 +131,16 @@ ggplot(MeanPerInterval,aes(x=interval, y=IntervalMean)) +
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 ```r
-Max <- MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
+MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
 ```
->**835**        
+
+```
+## Source: local data frame [1 x 1]
+## 
+##   interval
+## 1      835
+```
+      
     
 ### Imputing missing values
 
@@ -133,9 +148,13 @@ Max <- MeanPerInterval[which.max(MeanPerInterval$IntervalMean),1]
 
 
 ```r
-missing_values <- sum(is.na(PA1$steps))
+sum(is.na(PA1$steps))
 ```
->**2304**
+
+```
+## [1] 2304
+```
+
 
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
@@ -241,7 +260,7 @@ par(mfrow = c(1, 1), mar = c(3, 2, 2, 2))
 ggplot(MeanPerdaytype,aes(x=interval, y=Mean, group=day_type)) + 
         #define that it will be a line
          geom_line(aes(colour= day_type)) +
-        labs(x="interval",y= "Average Steps per interval") +
+        labs(x="<--- morning           ---     interval     ---            Evening --->",y= "Average Steps per interval") +
         scale_x_discrete(breaks=NULL)+
         geom_line(stat = "hline", yintercept = "mean", aes(colour = day_type))
 ```
@@ -249,6 +268,8 @@ ggplot(MeanPerdaytype,aes(x=interval, y=Mean, group=day_type)) +
 ![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
 
 >Instead of separating the data into two panels, I decided to display them together to be able to analyse more clearly their differences.  
-I also added horizontale lines that represent the average number of stpes taken during a 5 minutes interval.  
-The conclusion that can be made is that while the activity is clearly higher during the morning  and evening during the weekdays, it is more spread along the day in the weekends.  
-Hence , the average activity is higher on the weekends as shown by the mean lines.
+I also added horizontale lines that represent the average number of steps taken during a 5 minutes interval across a day.  
+
+>The conclusion that can be made is that while the activity is clearly higher during the morning  and evening during the weekdays, it is more spread along the day in the weekends.  
+
+>Hence , the average activity is higher on the weekends as shown by the mean lines.
